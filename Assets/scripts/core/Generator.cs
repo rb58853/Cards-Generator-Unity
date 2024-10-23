@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.Serialization.Configuration;
 using System.Security.Permissions;
 using Config;
 using UnityEngine;
@@ -17,13 +18,34 @@ namespace CardsGenerator
     {
         public string fieldName { get; private set; }
         public string type { get; private set; }
-        public dynamic value;
+        public dynamic value { get; private set; }
 
         public Field(string fieldName, string type, dynamic value)
         {
             this.fieldName = fieldName;
             this.type = type;
             this.value = value;
+        }
+        public bool setValue(string value)
+        {
+            if (type == "String")
+            {
+                this.value = value;
+                return true;
+            }
+
+            if (type == "Int32")
+            {
+                this.value = int.Parse(value);
+                return true;
+            }
+            if (type == "Int64")
+            {
+                this.value = long.Parse(value);
+                return true;
+            }
+            //Los valores vienen siempre desde un string, actualmente solo se pueden agregar enteros, longs, o string, en otro caso habria que implementar codigo
+            throw new NotImplementedException();
         }
     }
 
@@ -86,7 +108,6 @@ namespace CardsGenerator
                 {"field", new Field(fieldName: propertyName, type: propertyType, value:value)},
                 {"isField", false},
                 {"type", propertyType},
-                {"value", value},
                 {"privateSet", privateSet},
                 {"privateGet", privateGet},
                 {"isPublic", true},
@@ -114,7 +135,6 @@ namespace CardsGenerator
                 {"field", new Field(fieldName: propertyName, type: propertyType, value:value)},
                 {"isField", true},
                 {"type", propertyType},
-                {"value", value},
                 {"isPublic", !field.IsPrivate},
                 {"fieldAttributes",attrs},
                 {"isStatic",field.IsStatic}
@@ -179,7 +199,7 @@ namespace CardsGenerator
             foreach (string csvar in this.properties.Keys)
             {
                 string type = properties[csvar]["type"];
-                var value = properties[csvar]["value"];
+                var value = properties[csvar]["field"].value;
                 value = (value != null) ? value.ToString() : "null";
 
                 if (type == "String")

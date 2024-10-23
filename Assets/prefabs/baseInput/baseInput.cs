@@ -12,17 +12,7 @@ public class BaseInput : MonoBehaviour
 
     void Start()
     {
-
-    }
-
-    public void SetProp(string prop)
-    {
         //Asigna el nombre de la variable y los valores de la misma
-        SetText(prop);
-    }
-
-    private void Update()
-    {
         inputField = GetComponentInChildren<TMP_InputField>();
         textComponent = GetComponentInChildren<TextMeshProUGUI>();
 
@@ -31,20 +21,28 @@ public class BaseInput : MonoBehaviour
             Debug.LogError("CustomObject: Faltan componentes TMP_InputField o TextMeshProUGUI en los hijos.");
         }
         SetText(field.fieldName);
-        SetValue(field.value);
     }
 
-    public void SetInputType(TMP_InputField.ContentType contentType)
+    private void Update()
+    {
+        
+    }
+
+    private void SetInputType(TMP_InputField.ContentType contentType)
     {
         inputField.contentType = contentType;
     }
-    public void SetValue(dynamic value)
+    public void SetValue()
     {
-        inputField.text = value.ToString();
+        // El valor esta dado por el input
+        Debug.Log(inputField.text.ToString());
+        field.setValue(inputField.text.ToString());
     }
 
-    public void SetText(string newText)
+    private void SetText(string newText)
     {
         textComponent.text = newText;
+        inputField.text = field.value.ToString();
     }
+
 }
