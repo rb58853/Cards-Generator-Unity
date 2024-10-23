@@ -25,7 +25,7 @@ namespace CardsGenerator
             this.Fields = cardType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
         }
 
-        
+
     }
 
     public class DynamicGenerator
@@ -34,6 +34,7 @@ namespace CardsGenerator
         public string ClassName { get; private set; }
         public string? ImagePath { get; private set; }
         private Dictionary<string, Dictionary<string, dynamic>> properties;
+        private Dictionary<string, string> temp = new Dictionary<string, string>();
 
         public DynamicGenerator(Type type, string ClassName)
         {
@@ -133,6 +134,11 @@ namespace CardsGenerator
             Directory.CreateDirectory(getImagesFolderPath());
             this.ImagePath = Path.Combine(getImagesFolderPath(), ImageName);
         }
+        public Dictionary<string, dynamic> getField(string field)
+        {
+            return this.properties[field];
+        }
+
         public string getImagesFolderPath()
         {
             return Path.Combine(Environment.CurrentDirectory, "images");
