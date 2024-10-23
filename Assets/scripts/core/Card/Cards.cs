@@ -31,14 +31,14 @@ namespace Cards
         private int atkToIncrese;
 
 
-        //Test properties fields type
-        static int staticInt;
-        public string nullSet;
-        private string privateString;
-        protected string? protectedString;
-        static string varStaticProp { get; set; }
+        // //Test properties fields type
+        // static int staticInt;
+        // public string nullSet;
+        // private string privateString;
+        // protected string? protectedString;
+        // static string varStaticProp { get; set; }
 
-        //////////////////////////////////
+        // //////////////////////////////////
 
         public virtual void TargetAttack(Monster monster)
         {
@@ -75,5 +75,17 @@ namespace Cards
             //Console.WriteLine($"Monster {this.name} recibed damage = {damage}, currently healt = {this.healt}");
         }
     }
+    public abstract class Spell : Card
+    {
+        /// <summary>
+        /// Sumary de atk
+        /// </summary>
+        public virtual int damage { get; protected set; }
 
+        public virtual void TargetAttack(Monster monster)
+        {
+            //Attack a monster
+            monster.RecibedDamage(this.damage);
+        }
+    }
 }

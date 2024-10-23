@@ -165,7 +165,7 @@ namespace CardsGenerator
 
         public void setClassName(string ClassName)
         {
-            this.ClassName = ClassName;
+            this.ClassName = ClassName.Replace(" ", "");;
         }
 
         public void setImage(string ImageName)

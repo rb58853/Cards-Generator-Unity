@@ -12,24 +12,24 @@ namespace Config
     public enum CardType
     {
         monster,
+        Spell,
     }
     class CardsGenerationConfig
     {
         public static readonly string namespace_ = "Cards";
-        public static readonly string cardsPath = Path.Combine(Application.dataPath,"Generated Cards");
-
-
+        public static readonly string cardsPath = Path.Combine(Application.dataPath, "Generated Cards");
     }
     static class CardGeneration
     {
         private static readonly Dictionary<CardType, Type> CardTypes = new Dictionary<CardType, Type>
         {
-            {CardType.monster,typeof(Monster)}
+            {CardType.monster,typeof(Monster)},
+            {CardType.Spell,typeof(Spell)}
         };
 
         public static CardType CurrentTypeView = CardType.monster;
         public static Dictionary<CardType, DynamicGenerator> Cards = InitializeCards();
-        public static DynamicGenerator Card = Cards[CurrentTypeView];
+        public static DynamicGenerator Card { get { return Cards[CurrentTypeView]; } }
 
         public static Dictionary<CardType, DynamicGenerator> InitializeCards()
         {
@@ -52,7 +52,7 @@ namespace Config
         public static void CreateCard()
         {
             // Hacer que solo funcione si no hay errores
-            
+
             Cards[CurrentTypeView].WriteFile();
             newCard(CurrentTypeView);
         }

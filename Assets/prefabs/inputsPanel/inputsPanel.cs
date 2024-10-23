@@ -29,6 +29,6 @@ public class inputsPanel : MonoBehaviour
         newInput.GetComponent<BaseInput>().field = field;
         newInput.transform.SetParent(parentPanel, false);
         float parentHeight = parentPanel.GetComponent<RectTransform>().rect.height;
-        newInput.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, parentHeight / 2 + (-inputPrefab.GetComponent<RectTransform>().rect.height - 5) * i); // Posiciona verticalmente
+        newInput.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, parentHeight / 2 - 50 + (-inputPrefab.GetComponent<RectTransform>().rect.height - 5) * i); // Posiciona verticalmente
     }
 }
