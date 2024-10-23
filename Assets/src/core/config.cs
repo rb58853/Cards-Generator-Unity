@@ -12,7 +12,7 @@ namespace Config
     public enum CardType
     {
         monster,
-        Spell,
+        spell,
     }
     class CardsGenerationConfig
     {
@@ -24,7 +24,7 @@ namespace Config
         private static readonly Dictionary<CardType, Type> CardTypes = new Dictionary<CardType, Type>
         {
             {CardType.monster,typeof(Monster)},
-            {CardType.Spell,typeof(Spell)}
+            {CardType.spell,typeof(Spell)}
         };
 
         public static CardType CurrentTypeView = CardType.monster;

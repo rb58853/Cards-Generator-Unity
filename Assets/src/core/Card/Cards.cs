@@ -81,6 +81,7 @@ namespace Cards
         /// Sumary de atk
         /// </summary>
         public virtual int damage { get; protected set; }
+        public string damageType { get; private set; }
 
         public virtual void TargetAttack(Monster monster)
         {
