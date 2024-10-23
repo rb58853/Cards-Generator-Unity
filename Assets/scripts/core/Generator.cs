@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Security.Permissions;
 using Config;
+using UnityEngine;
 using Utils;
 
 namespace CardsGenerator
@@ -17,6 +18,7 @@ namespace CardsGenerator
         public string fieldName { get; private set; }
         public string type { get; private set; }
         public dynamic value;
+
         public Field(string fieldName, string type, dynamic value)
         {
             this.fieldName = fieldName;
@@ -81,6 +83,7 @@ namespace CardsGenerator
                 dynamic value = FieldUtils.DefaultValue(prop.PropertyType.UnderlyingSystemType, propertyName);
 
                 Dictionary<string, dynamic> property = new Dictionary<string, dynamic>{
+                {"field", new Field(fieldName: propertyName, type: propertyType, value:value)},
                 {"isField", false},
                 {"type", propertyType},
                 {"value", value},
@@ -108,6 +111,7 @@ namespace CardsGenerator
             if (!this.properties.ContainsKey(propertyName))
             {
                 Dictionary<string, dynamic> property = new Dictionary<string, dynamic>{
+                {"field", new Field(fieldName: propertyName, type: propertyType, value:value)},
                 {"isField", true},
                 {"type", propertyType},
                 {"value", value},
@@ -124,7 +128,7 @@ namespace CardsGenerator
         {
             List<Field> fields = new List<Field>();
             foreach (string prop in this.properties.Keys)
-                fields.Add(new Field(fieldName: prop, type: this.properties[prop]["type"], value: this.properties[prop]["value"]));
+                fields.Add(this.properties[prop]["field"]);
 
 
             return fields;
@@ -163,7 +167,8 @@ namespace CardsGenerator
         private string GenerateCsCode()
         {
 
-            string namespace_ = $"namespace {CardsGenerationConfig.namespace_}\n";
+
+            string namespace_ = $"using System;\nnamespace {CardsGenerationConfig.namespace_}\n";
             namespace_ += "{\n";
             string classHead = $"\tclass {this.ClassName} : {this.BaseTypeName}\n";
             string propertiesBody = "\t{\n";
@@ -218,7 +223,8 @@ namespace CardsGenerator
         public void WriteFile()
         {
             string code = GenerateCsCode();
-            string folderPath = Path.Combine(Environment.CurrentDirectory, $"{this.BaseTypeName}s", this.ClassName);
+            string folderPath = Path.Combine(Config.CardsGenerationConfig.cardsPath, $"{this.BaseTypeName}s", this.ClassName);
+            // string folderPath = Path.Combine(Environment.CurrentDirectory, $"{this.BaseTypeName}s", this.ClassName);
             Directory.CreateDirectory(folderPath);
             string filePath = Path.Combine(folderPath, $"{this.ClassName}.cs");
             using (StreamWriter writer = new StreamWriter(filePath))

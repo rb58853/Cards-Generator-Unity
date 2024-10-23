@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Cards;
 using CardsGenerator;
+using UnityEngine;
 // using CardsGenerator;
 
 namespace Config
@@ -14,6 +16,8 @@ namespace Config
     class CardsGenerationConfig
     {
         public static readonly string namespace_ = "Cards";
+        public static readonly string cardsPath = Path.Combine(Application.dataPath,"Generated Cards");
+
 
     }
     static class CardGeneration
@@ -45,11 +49,12 @@ namespace Config
         {
             Cards[baseType] = new DynamicGenerator(type: CardTypes[baseType], name);
         }
-        public static void CreateCard(CardType cardType)
+        public static void CreateCard()
         {
             // Hacer que solo funcione si no hay errores
-            Cards[cardType].WriteFile();
-            newCard(cardType);
+            
+            Cards[CurrentTypeView].WriteFile();
+            newCard(CurrentTypeView);
         }
 
     }
