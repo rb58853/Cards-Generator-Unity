@@ -17,7 +17,7 @@ namespace Config
     class CardsGenerationConfig
     {
         public static readonly string namespace_ = "Cards";
-        public static readonly string cardsPath = Path.Combine(Application.dataPath, "Generated Cards");
+        public static readonly string cardsPath = Path.Combine(Application.dataPath, "src", "Generated Cards");
     }
     static class CardGeneration
     {
