@@ -23,10 +23,11 @@ public class typesDropdown : MonoBehaviour
         else
         {
 
-            string[] options = CardGeneration.AvailableTypes;
+            CardType[] options = CardGeneration.AvailableTypes;
+            List<string> optionsStr = options.Select(item => item.ToString()).ToList();
 
             dropdownComponent.ClearOptions();
-            dropdownComponent.AddOptions(options.ToList());
+            dropdownComponent.AddOptions(optionsStr);
         }
     }
 }

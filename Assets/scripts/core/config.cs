@@ -7,6 +7,10 @@ using CardsGenerator;
 
 namespace Config
 {
+    public enum CardType
+    {
+        monster,
+    }
     class CardsGenerationConfig
     {
         public static readonly string namespace_ = "Cards";
@@ -14,34 +18,34 @@ namespace Config
     }
     static class CardGeneration
     {
-        private static readonly Dictionary<string, Type> CardTypes = new Dictionary<string, Type>
+        private static readonly Dictionary<CardType, Type> CardTypes = new Dictionary<CardType, Type>
         {
-            {"monster",typeof(Monster)}
+            {CardType.monster,typeof(Monster)}
         };
 
-        public static string CurrentTypeView = "monster";
-        public static Dictionary<string, DynamicGenerator> Cards = InitializeCards();
+        public static CardType CurrentTypeView = CardType.monster;
+        public static Dictionary<CardType, DynamicGenerator> Cards = InitializeCards();
         public static DynamicGenerator Card = Cards[CurrentTypeView];
 
-        public static Dictionary<string, DynamicGenerator> InitializeCards()
+        public static Dictionary<CardType, DynamicGenerator> InitializeCards()
         {
-            Dictionary<string, DynamicGenerator> cards = new Dictionary<string, DynamicGenerator>();
-            foreach (string key in CardTypes.Keys)
+            Dictionary<CardType, DynamicGenerator> cards = new Dictionary<CardType, DynamicGenerator>();
+            foreach (CardType key in CardTypes.Keys)
             {
                 cards[key] = new DynamicGenerator(CardTypes[key], $"{key}Child");
             }
             return cards;
         }
-        public static string[] AvailableTypes
+        public static CardType[] AvailableTypes
         {
             get { return CardTypes.Keys.ToArray(); }
         }
 
-        private static void newCard(string baseType, string name = "className")
+        private static void newCard(CardType baseType, string name = "className")
         {
-            Cards["monster"] = new DynamicGenerator(type: CardTypes[baseType], name);
+            Cards[baseType] = new DynamicGenerator(type: CardTypes[baseType], name);
         }
-        public static void CreateCard(string cardType)
+        public static void CreateCard(CardType cardType)
         {
             // Hacer que solo funcione si no hay errores
             Cards[cardType].WriteFile();

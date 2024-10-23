@@ -2,12 +2,13 @@ using UnityEngine;
 using TMPro;
 using Cards;
 using Config;
+using CardsGenerator;
 
 public class BaseInput : MonoBehaviour
 {
     TMP_InputField inputField;
     TextMeshProUGUI textComponent;
-    public string prop;
+    public Field field;
 
     void Start()
     {
@@ -29,8 +30,8 @@ public class BaseInput : MonoBehaviour
         {
             Debug.LogError("CustomObject: Faltan componentes TMP_InputField o TextMeshProUGUI en los hijos.");
         }
-        SetText(prop);
-        SetValue(CardGeneration.Card.getField(prop)["value"]);
+        SetText(field.fieldName);
+        SetValue(field.value);
     }
 
     public void SetInputType(TMP_InputField.ContentType contentType)

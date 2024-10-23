@@ -10,6 +10,20 @@ using Utils;
 
 namespace CardsGenerator
 {
+
+    public class Field
+    {
+        public string fieldName { get; private set; }
+        public string type { get; private set; }
+        public dynamic value;
+        public Field(string fieldName, string type, dynamic value)
+        {
+            this.fieldName = fieldName;
+            this.type = type;
+            this.value = value;
+        }
+    }
+
     public class ClassInfo
     {
         public string ClassName { get; private set; }
@@ -63,7 +77,7 @@ namespace CardsGenerator
                 bool privateSet = prop.SetMethod.IsPrivate;
                 bool privateGet = prop.GetMethod.IsPrivate;
 
-                dynamic value = Field.DefaultValue(prop.PropertyType.UnderlyingSystemType, propertyName);
+                dynamic value = FieldUtils.DefaultValue(prop.PropertyType.UnderlyingSystemType, propertyName);
 
                 Dictionary<string, dynamic> property = new Dictionary<string, dynamic>{
                 {"isField", false},
@@ -84,10 +98,10 @@ namespace CardsGenerator
         private void InitField(FieldInfo field)
         {
             //TODO aqui deberia tenerse en cuenta si el tipado de la propiedad es estatico u otro, para eso necesito saber exactamente que es lo que se quiere lograr con la aplicacion
-            string propertyName = Utils.Field.getBaseName(field.Name);
+            string propertyName = Utils.FieldUtils.getBaseName(field.Name);
             string propertyType = field.FieldType.UnderlyingSystemType.Name;
 
-            dynamic value = Field.DefaultValue(field.FieldType, propertyName);
+            dynamic value = FieldUtils.DefaultValue(field.FieldType, propertyName);
             string attrs = string.Join(" ", field.Attributes.ToString().Split(",").Select(item => item.ToLower()));
 
             if (!this.properties.ContainsKey(propertyName))
@@ -105,11 +119,11 @@ namespace CardsGenerator
             }
         }
 
-        public Dictionary<string, string> Fields()
+        public List<Field> Fields()
         {
-            Dictionary<string, string> fields = new Dictionary<string, string>();
+            List<Field> fields = new List<Field>();
             foreach (string prop in this.properties.Keys)
-                fields.Add(prop, this.properties[prop]["type"]);
+                fields.Add(new Field(fieldName: prop, type: this.properties[prop]["type"], value: this.properties[prop]["value"]));
 
             return fields;
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Utils
 {
-    static class Field
+    static class FieldUtils
     {
         static readonly Dictionary<string, string> InputType = new Dictionary<string, string>{
         {"String","string"}
