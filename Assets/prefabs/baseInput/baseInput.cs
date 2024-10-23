@@ -21,7 +21,7 @@ public class BaseInput : MonoBehaviour
         SetText(prop);
     }
 
-    private void Awake()
+    private void Update()
     {
         inputField = GetComponentInChildren<TMP_InputField>();
         textComponent = GetComponentInChildren<TextMeshProUGUI>();

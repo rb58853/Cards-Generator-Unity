@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -124,6 +125,7 @@ namespace CardsGenerator
             List<Field> fields = new List<Field>();
             foreach (string prop in this.properties.Keys)
                 fields.Add(new Field(fieldName: prop, type: this.properties[prop]["type"], value: this.properties[prop]["value"]));
+
 
             return fields;
         }

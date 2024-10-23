@@ -9,7 +9,6 @@ using Utils;
 public class inputsPanel : MonoBehaviour
 {
     public BaseInput inputPrefab; // Prefab del TMP_InputField
-    public int numberOfInputs = 5; // Número de campos de entrada a agregar
     public RectTransform parentPanel; // Panel padre donde se agregarán los campos de entrada
     public CardType typeCard;
     int i = 0;
@@ -26,9 +25,10 @@ public class inputsPanel : MonoBehaviour
 
     void AddInputField(Field field)
     {
-        BaseInput newInput = Instantiate(inputPrefab);
-        newInput.field = field;
+        GameObject newInput = Instantiate(inputPrefab.gameObject);
+        newInput.GetComponent<BaseInput>().field = field;
         newInput.transform.SetParent(parentPanel, false);
-        newInput.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, (-inputPrefab.GetComponent<RectTransform>().rect.height - 5) * i); // Posiciona verticalmente
+        float parentHeight = parentPanel.GetComponent<RectTransform>().rect.height;
+        newInput.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, parentHeight / 2 + (-inputPrefab.GetComponent<RectTransform>().rect.height - 5) * i); // Posiciona verticalmente
     }
 }
