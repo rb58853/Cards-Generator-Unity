@@ -30,4 +30,11 @@ public class typesDropdown : MonoBehaviour
             dropdownComponent.AddOptions(optionsStr);
         }
     }
+    public void OnDropdownValueChanged()
+    {   
+        
+        Debug.Log("Opción seleccionada: " + dropdownComponent.value);
+        CardGeneration.CurrentTypeView = (CardType)dropdownComponent.value;
+        Debug.Log("El tipo cambio a: " + CardGeneration.CurrentTypeView.ToString());
+    }
 }

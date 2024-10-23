@@ -22,6 +22,17 @@ public class inputsPanel : MonoBehaviour
             AddInputField(field);
         }
     }
+    void Update()
+    {
+        if (CardGeneration.CurrentTypeView == typeCard)
+        {
+            parentPanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            parentPanel.gameObject.SetActive(false);
+        }
+    }
 
     void AddInputField(Field field)
     {
