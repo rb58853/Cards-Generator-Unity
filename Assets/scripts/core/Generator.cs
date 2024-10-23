@@ -24,6 +24,8 @@ namespace CardsGenerator
             this.Properties = cardType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
             this.Fields = cardType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
         }
+
+        
     }
 
     public class DynamicGenerator
@@ -52,7 +54,7 @@ namespace CardsGenerator
         {
             //TODO aqui deberia tenerse en cuenta si el tipado de la propiedad es estatico u otro, para eso necesito saber exactamente que es lo que se quiere lograr con la aplicacion
             string propertyName = prop.Name;
-            string propertyType = prop.PropertyType.Name;
+            string propertyType = prop.PropertyType.UnderlyingSystemType.Name;
 
             if (prop.SetMethod != null && prop.GetMethod != null)
             {
@@ -60,10 +62,12 @@ namespace CardsGenerator
                 bool privateSet = prop.SetMethod.IsPrivate;
                 bool privateGet = prop.GetMethod.IsPrivate;
 
+                dynamic value = Field.DefaultValue(prop.PropertyType.UnderlyingSystemType, propertyName);
+
                 Dictionary<string, dynamic> property = new Dictionary<string, dynamic>{
                 {"isField", false},
                 {"type", propertyType},
-                {"value", null},
+                {"value", value},
                 {"privateSet", privateSet},
                 {"privateGet", privateGet},
                 {"isPublic", true},
@@ -80,14 +84,10 @@ namespace CardsGenerator
         {
             //TODO aqui deberia tenerse en cuenta si el tipado de la propiedad es estatico u otro, para eso necesito saber exactamente que es lo que se quiere lograr con la aplicacion
             string propertyName = Utils.Field.getBaseName(field.Name);
-            string propertyType = field.FieldType.Name;
-            // dynamic value = default();
-            dynamic value = null;
+            string propertyType = field.FieldType.UnderlyingSystemType.Name;
 
-            //TODO mejorar la limpieza de estas lineas
+            dynamic value = Field.DefaultValue(field.FieldType, propertyName);
             string attrs = string.Join(" ", field.Attributes.ToString().Split(",").Select(item => item.ToLower()));
-
-            //
 
             if (!this.properties.ContainsKey(propertyName))
             {
