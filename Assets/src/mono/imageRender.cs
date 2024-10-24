@@ -18,8 +18,8 @@ public class imageRender : MonoBehaviour
     public void ImageView()
     {
         Sprite sprite = CardGeneration.GetImage();
-        if (sprite != null)
-            img.sprite = sprite;
+        // if (sprite != null)
+        img.sprite = sprite;
     }
     public static void Change()
     {

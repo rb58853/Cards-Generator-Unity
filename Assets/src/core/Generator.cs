@@ -249,6 +249,7 @@ namespace CardsGenerator
         }
         public void WriteFile()
         {
+            SaveImage();
             string code = GenerateCsCode();
             string folderPath = Path.Combine(Config.CardsGenerationConfig.cardsPath, $"{this.BaseTypeName}s", this.ClassName);
             // string folderPath = Path.Combine(Environment.CurrentDirectory, $"{this.BaseTypeName}s", this.ClassName);
@@ -258,7 +259,6 @@ namespace CardsGenerator
             {
                 writer.WriteLine(code);
             }
-            SaveImage();
         }
     }
 }
