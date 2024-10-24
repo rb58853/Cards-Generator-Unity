@@ -8,6 +8,8 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization.Configuration;
 using System.Security.Permissions;
 using Config;
+using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 using Utils;
 
@@ -69,9 +71,9 @@ namespace CardsGenerator
 
     public class DynamicGenerator
     {
-        public string? BaseTypeName { get; private set; }
+        public byte[] image { get; private set; }
+        public string BaseTypeName { get; private set; }
         public string ClassName { get; private set; }
-        public string? ImagePath { get; private set; }
         private Dictionary<string, Dictionary<string, dynamic>> properties;
         private Dictionary<string, string> temp = new Dictionary<string, string>();
 
@@ -81,6 +83,7 @@ namespace CardsGenerator
             ClassInfo info = new ClassInfo(type);
             this.BaseTypeName = info.ClassName;
             this.ClassName = ClassName;
+            this.image = null;
 
             foreach (PropertyInfo prop in info.Properties)
                 InitProperty(prop);
@@ -165,15 +168,15 @@ namespace CardsGenerator
 
         public void setClassName(string ClassName)
         {
-            this.ClassName = ClassName.Replace(" ", "");;
+            this.ClassName = ClassName.Replace(" ", ""); ;
         }
 
-        public void setImage(string ImageName)
+        public void setImage(byte[] image)
         {
             // Asigna el nombre de la imagen
-            Directory.CreateDirectory(getImagesFolderPath());
-            this.ImagePath = Path.Combine(getImagesFolderPath(), ImageName);
+            this.image = image;
         }
+
         public Dictionary<string, dynamic> getField(string field)
         {
             return this.properties[field];
@@ -186,8 +189,6 @@ namespace CardsGenerator
 
         private string GenerateCsCode()
         {
-
-
             string namespace_ = $"using System;\nnamespace {CardsGenerationConfig.namespace_}\n";
             namespace_ += "{\n";
             string classHead = $"\tclass {this.ClassName} : {this.BaseTypeName}\n";
@@ -240,6 +241,12 @@ namespace CardsGenerator
             Console.WriteLine(code);
             return code;
         }
+        private void SaveImage()
+        {
+            string folderPath = Path.Combine(Config.CardsGenerationConfig.cardsPath, $"{this.BaseTypeName}s", this.ClassName);
+            string path = Path.Combine(folderPath, "image.jpg");
+            File.WriteAllBytes(path, this.image);
+        }
         public void WriteFile()
         {
             string code = GenerateCsCode();
@@ -251,6 +258,7 @@ namespace CardsGenerator
             {
                 writer.WriteLine(code);
             }
+            SaveImage();
         }
     }
 }

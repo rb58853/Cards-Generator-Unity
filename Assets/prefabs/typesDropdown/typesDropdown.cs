@@ -35,6 +35,8 @@ public class typesDropdown : MonoBehaviour
         
         Debug.Log("Opción seleccionada: " + dropdownComponent.value);
         CardGeneration.CurrentTypeView = (CardType)dropdownComponent.value;
+        imageRender.Change();
+
         Debug.Log("El tipo cambio a: " + CardGeneration.CurrentTypeView.ToString());
     }
 }
